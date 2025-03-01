@@ -1,116 +1,156 @@
 <template>
   <div class="product-list">
-    <div class="product" v-for="product in products" :key="product.id">
-      <img :src="product.image" :alt="product.title" class="product-image">
-      <h3 class="product-title">{{ product.title }}</h3>
-      <p class="product-description">{{ product.description }}</p>
-      <a :href="product.amazonLink" target="_blank" rel="noopener noreferrer" class="amazon-button">
-        View on Amazon
-      </a>
+    <h2 class="product-list-title">Brzydkie. Na co ci to?</h2>
+    
+    <div class="product-grid">
+      <div v-for="product in products" :key="product.id" class="product-card">
+        <div class="product-image">
+          <img :src="product.imageUrl" :alt="product.name">
+        </div>
+        
+        <div class="product-details">
+          <h3 class="product-name">{{ product.name }}</h3>
+          <div class="product-price">${{ product.price.toFixed(2) }}</div>
+          
+          <div class="product-meta">
+            <span class="product-rating">
+              <span class="stars">{{ '★'.repeat(Math.round(product.rating)) }}{{ '☆'.repeat(5 - Math.round(product.rating)) }}</span>
+              <span class="rating-value">{{ product.rating.toFixed(1) }}</span>
+            </span>
+          </div>
+          
+          <p class="product-description">{{ product.description }}</p>
+          
+          <div class="product-actions">
+            <a :href="product.aliExpressUrl" 
+               target="_blank" 
+               rel="noopener noreferrer" 
+               class="aliexpress-btn">
+              View on AliExpress
+            </a>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 </template>
 
-<script lang="ts">
-import { defineComponent } from 'vue';
+<script>
+import uselessProducts from '../data/uselessProducts.js';
 
-interface Product {
-  id: number;
-  title: string;
-  description: string;
-  image: string;
-  amazonLink: string;
-}
-
-export default defineComponent({
+export default {
   name: 'ProductList',
   data() {
     return {
-      products: [
-        {
-          id: 1,
-          title: 'Wireless Bluetooth Headphones',
-          description: 'High-quality noise-cancelling headphones with 30-hour battery life and premium sound quality.',
-          image: 'https://via.placeholder.com/300x200?text=Headphones',
-          amazonLink: 'https://www.amazon.com/example-headphones'
-        },
-        {
-          id: 2,
-          title: 'Smart Watch Series 6',
-          description: 'Track your fitness goals, heart rate, and get notifications directly on your wrist.',
-          image: 'https://via.placeholder.com/300x200?text=SmartWatch',
-          amazonLink: 'https://www.amazon.com/example-smartwatch'
-        },
-        {
-          id: 3,
-          title: 'Portable Power Bank 20000mAh',
-          description: 'Fast-charging power bank with dual USB ports and enough capacity to charge your phone multiple times.',
-          image: 'https://via.placeholder.com/300x200?text=PowerBank',
-          amazonLink: 'https://www.amazon.com/example-powerbank'
-        },
-        {
-          id: 4,
-          title: 'Gaming Mechanical Keyboard',
-          description: 'RGB backlit mechanical keyboard with customizable keys and satisfying tactile feedback.',
-          image: 'https://via.placeholder.com/300x200?text=Keyboard',
-          amazonLink: 'https://www.amazon.com/example-keyboard'
-        }
-      ] as Product[]
+      products: uselessProducts
     };
   }
-});
+};
 </script>
 
 <style scoped>
 .product-list {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-  gap: 20px;
-  width: 100%;
-  max-width: 1200px;
+  padding: 20px;
 }
 
-.product {
-  border: 1px solid #e0e0e0;
+.product-list-title {
+  font-size: 28px;
+  text-align: center;
+  margin-bottom: 30px;
+  color: #e63946;
+}
+
+.product-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 25px;
+}
+
+.product-card {
+  border: 1px solid #e1e1e1;
   border-radius: 8px;
-  padding: 16px;
-  display: flex;
-  flex-direction: column;
-  background-color: #fff;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+  transition: transform 0.2s, box-shadow 0.2s;
+  background: white;
+}
+
+.product-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
 }
 
 .product-image {
-  width: 100%;
   height: 200px;
-  object-fit: cover;
-  border-radius: 4px;
-  margin-bottom: 12px;
+  overflow: hidden;
+  background: #f8f9fa;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
-.product-title {
-  font-size: 1.2rem;
-  margin: 10px 0;
+.product-image img {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+}
+
+.product-details {
+  padding: 15px;
+}
+
+.product-name {
+  margin: 0 0 10px;
+  font-size: 18px;
+  color: #333;
+}
+
+.product-price {
+  font-size: 22px;
+  font-weight: bold;
+  color: #e63946;
+  margin-bottom: 10px;
+}
+
+.product-meta {
+  margin-bottom: 10px;
+  font-size: 14px;
+}
+
+.stars {
+  color: #ffc107;
+  letter-spacing: -2px;
+}
+
+.rating-value {
+  margin-left: 5px;
+  color: #666;
 }
 
 .product-description {
+  font-size: 14px;
   color: #666;
-  flex-grow: 1;
-  margin-bottom: 16px;
+  margin-bottom: 15px;
+  line-height: 1.4;
 }
 
-.amazon-button {
-  background-color: #ff9900;
-  color: #000;
-  padding: 8px 12px;
+.product-actions {
+  display: flex;
+}
+
+.aliexpress-btn {
+  flex-grow: 1;
+  background: #ff4747;
+  color: white;
+  text-align: center;
   text-decoration: none;
+  padding: 10px 15px;
   border-radius: 4px;
   font-weight: bold;
-  text-align: center;
-  transition: background-color 0.2s ease;
+  transition: background 0.2s;
+  display: inline-block;
 }
 
-.amazon-button:hover {
-  background-color: #ffac33;
+.aliexpress-btn:hover {
+  background: #e03838;
 }
 </style>
