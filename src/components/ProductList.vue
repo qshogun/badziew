@@ -10,7 +10,7 @@
         
         <div class="product-details">
           <h3 class="product-name">{{ product.name }}</h3>
-          <div class="product-price">${{ product.price.toFixed(2) }}</div>
+          <div class="product-price">{{ product.price.toFixed(2) }} PLN</div>
           
           <div class="product-meta">
             <span class="product-rating">
